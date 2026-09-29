@@ -43,12 +43,15 @@ namespace ZombieParty.Controllers
 
             return this.View(zombieType);
         }
-        public IActionResult Details()
+        public IActionResult Details(int id)
         {
             ZombieTypeVM zombieTypeVM = new()
             {
                 ZombieType = new(),
-                ZombiesList = _baseDonnees.Zombies.Where(z => z.ZombieTypeId == id).ToList()
+                ZombiesList = _baseDonnees.Zombies.Where(z => z.ZombieTypeId == id).ToList(),
+                ZombiesCount = _baseDonnees.Zombies.Count(),
+                PointsAverage = _baseDonnees.Zombies.Average(p => p.Point)
+
             };
 
             zombieTypeVM.ZombieType = _baseDonnees.ZombieTypes.FirstOrDefault(zt => zt.Id == id);
