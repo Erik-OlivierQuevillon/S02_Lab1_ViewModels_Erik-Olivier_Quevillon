@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ZombieParty.Models
 {
-    public class Weapon
+    public class Weapon: IValidatableObject
     {
         [Required]
         [MaxLength(250)]
@@ -13,6 +13,7 @@ namespace ZombieParty.Models
         public string Name { get; set; }
         [MaxLength(2500)]
         [DisplayName]
+        
         public string? Description { get; set; }
         [Range(0,500)]
         public decimal Force { get; set; }
@@ -28,6 +29,16 @@ namespace ZombieParty.Models
         [DisplayName]
         public int Qty { get; set; }
         public int QtyBought { get; set; }
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var item = validationContext.ObjectInstance as Weapon;
+            if (item == null) yield break;
+            if (string.IsNullOrWhiteSpace(item.Description)) yield break;
+            if (item.Description.Split(" ").Length <= 3)
+                yield return new ValidationResult("Description needs to have more than 3 words please.", new[] { "Description" });
+        }
+
+
 
     }
 }
